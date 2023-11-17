@@ -16,19 +16,48 @@
 
 
 import requests
+import time
 
-AMADEUS_API_KEY = '7GQutU8AA0jsgcg3Nj0OOrn3UAzl'
+# Define your client credentials
+CLIENT_ID = 'UgvkvcINTG93c4hNbGGY4LN3nRxrk9Ex'
+CLIENT_SECRET = 'TZLqA7rukbLdWSSw'
 
-def search_hotels(location):
-    base_url = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city'
-    params = {
-        'cityCode': location,  # City or location code,
-    }
+# Initialize variables to store the access token and its expiration time
+ACCESS_TOKEN = None
+TOKEN_EXPIRATION = 0
+
+# Function to obtain or refresh the access token
+def get_access_token():
+    global ACCESS_TOKEN, TOKEN_EXPIRATION
+    current_time = int(time.time())
+
+    # Check if the token is expired or not obtained yet
+    if ACCESS_TOKEN is None or current_time >= TOKEN_EXPIRATION:
+        token_url = 'https://test.api.amadeus.com/v1/security/oauth2/token'
+        data = {
+            'grant_type': 'client_credentials',
+            'client_id': CLIENT_ID,
+            'client_secret': CLIENT_SECRET
+        }
+
+        response = requests.post(token_url, data=data)
+        if response.status_code == 200:
+            token_data = response.json()
+            ACCESS_TOKEN = token_data['access_token']
+            TOKEN_EXPIRATION = current_time + token_data['expires_in']
+        else:
+            # Handle token retrieval error
+            raise Exception("Failed to retrieve access token")
+
+    return ACCESS_TOKEN
+
+# Function to make authenticated API requests
+def make_authenticated_request(url, params=None):
     headers = {
-        'Authorization': f'Bearer {AMADEUS_API_KEY}',
+        'Authorization': f'Bearer {get_access_token()}',
     }
 
-    response = requests.get(base_url, params=params, headers=headers)
+    response = requests.get(url, params=params, headers=headers)
 
     if response.status_code == 200:
         return response.json()
@@ -36,5 +65,23 @@ def search_hotels(location):
         # Handle errors gracefully
         return None
 
+def search_hotels(location):
+    base_url = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city'
+    params = {
+        'cityCode': location,  # City or location code,
+    }
 
+    result = make_authenticated_request(base_url, params=params)
 
+    return result
+
+# Example usage:
+location = 'your_location_code'
+hotels_data = search_hotels(location)
+
+if hotels_data is not None:
+    # Process the hotel data
+    print(hotels_data)
+else:
+    # Handle error
+    print("Error occurred while searching for hotels.")
