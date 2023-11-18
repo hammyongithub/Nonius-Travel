@@ -3,7 +3,7 @@
       <v-card-title>{{ hotel.name }}</v-card-title>
       <v-card-subtitle>{{ hotel.chainCode }}</v-card-subtitle>
       <v-card-text>
-        <!-- Display other hotel information here -->
+        <!-- Display other hotel information here, next is date -->
       </v-card-text>
     </v-card>
   </template>
