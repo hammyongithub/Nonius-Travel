@@ -74,7 +74,7 @@ export default {
           console.log(response.data.data);
           this.hotels = response.data.data;
           console.log(this.hotels);
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < 50; i++) {
             this.hotelIds.push(response.data.data[i].hotelId);
           }
           console.log(this.hotelIds);
