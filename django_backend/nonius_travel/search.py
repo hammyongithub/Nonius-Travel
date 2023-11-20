@@ -15,8 +15,14 @@
 # GET EXAMPLE:  curl "https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=LON"      -H "Authorization: Bearer RMvQjG3TK1ixyYXf2DG6dnVqprUx"
 
 
+from tabnanny import check
+from unittest import result
+from venv import logger
 import requests
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Define your client credentials
 CLIENT_ID = 'UgvkvcINTG93c4hNbGGY4LN3nRxrk9Ex'
@@ -75,13 +81,21 @@ def search_hotels(location):
 
     return result
 
-# Example usage:
-location = 'your_location_code'
-hotels_data = search_hotels(location)
 
-if hotels_data is not None:
-    # Process the hotel data
-    print(hotels_data)
-else:
-    # Handle error
-    print("Error occurred while searching for hotels.")
+def search_offers(hotelIds, adults, checkInDate, checkOutDate, roomQuantity, priceRange, currency, boardType):
+    base_url = 'https://test.api.amadeus.com/v3/shopping/hotel-offers'
+    
+    params = {
+        'hotelIds': hotelIds,
+        'adults': adults,
+        'checkInDate': checkInDate,
+        'checkOutDate': checkOutDate,
+        'roomQuantity': roomQuantity,
+        'priceRange': priceRange,
+        'currency': currency,
+        'boardType': boardType,
+    }
+
+    result = make_authenticated_request(base_url, params=params)
+
+    return result
