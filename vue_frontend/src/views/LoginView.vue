@@ -15,11 +15,11 @@
     <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
     <v-text-field
-      v-model="email"
+      v-model="username"
       density="compact"
-        placeholder="Email address"
-        prepend-inner-icon="mdi-email-outline"
-        variant="outlined"
+      placeholder="Username"
+      prepend-inner-icon="mdi-email-outline"
+      variant="outlined"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -60,29 +60,33 @@
 </template>
   
 <script>
-  import axios from 'axios';
-
-  export default {
-    data: () => ({
+import axios from 'axios';
+export default {
+  data() {
+    return {
       visible: false,
-      email: '',
+      username: '',
       password: '',
-    }),
-    methods: {
-      login() {
-        const userData = {
-          email: this.email,
-          password: this.password,
-        };
+    };
+  },
+  methods: {
+    login() {
+      const userData = {
+        username: this.username,
+        password: this.password,
+      };
       axios
-        .post('http://127.0.0.1:8000/api/v1/login/', userData)
-        .then((response) => {
+        .post('http://127.0.0.1:8000/api/v1/auth/users/', userData)
+        .then(response => {
           console.log(response.data);
+          // Here you might want to store the token in local storage or state management
+          // Redirect to a different page or update the UI
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
+          // Handle error (e.g., show error message)
         });
-      }
     }
   }
+};
 </script>

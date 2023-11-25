@@ -3,10 +3,16 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Clients
-from .serializers import ClientsSerializer
+from .serializers import ClientsSerializer, UserSerializer
 from django.http import JsonResponse
 from .search import search_hotels, search_offers
 import logging
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 logger = logging.getLogger(__name__)
 

@@ -36,7 +36,7 @@
     <v-text-field
       v-model="email"
       density="compact"
-      placeholder="Email address"
+      placeholder="Enter your email"
       prepend-inner-icon="mdi-email-outline"
       variant="outlined"
     ></v-text-field>
@@ -67,6 +67,8 @@
 </template>
   
 <script>
+  import axios from 'axios';
+  
   export default {
     data: () => ({
       visible: false,
@@ -78,21 +80,23 @@
     methods: {
       register() {
         const userData = {
-          firstName: this.firstName,
-          lastName: this.lastName,
+          username: this.firstName + '_' + this.lastName,
           email: this.email,
           password: this.password,
-        }
+          // Include other fields as per your User model
+        };
         axios
-          .post('http://127.0.0.1:8000/api/v1/signup/', userData)
-          .then((response) => {
+          .post('http://127.0.0.1:8000/api/v1/auth/users/', userData)
+          .then(response => {
             console.log(response.data);
+            // Handle success (e.g., show success message, redirect)
           })
-          .catch((error) => {
-            
-          })
-      },
-    },
+          .catch(error => {
+            console.error(error);
+            // Handle error (e.g., show error message)
+          });
+      }
+    }
   };
 </script>
   

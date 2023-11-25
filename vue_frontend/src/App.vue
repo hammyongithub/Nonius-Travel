@@ -47,18 +47,18 @@
         <v-icon>mdi-theme-light-dark</v-icon>
       </v-btn>
 
-      <v-btn
-        to="/login"
-        variant="text"
-        text="login">
-      </v-btn>
+      <template v-if="!isLoggedIn">
+        <v-btn color="primary" variant="text" to="/login">
+          Login
+        </v-btn>
+        <v-btn color="primary" variant="text" to="/register">
+          Register
+        </v-btn>
+      </template>
 
-      <v-btn
-        to="/signup"
-        variant="text"
-        text="signup">
+      <v-btn v-else color="primary" variant="text" @click="logout">
+        Logout
       </v-btn>
-    
     </v-toolbar>
   
     <v-main>
@@ -73,10 +73,14 @@
       return {
         drawer: true,
         rail: true,
+        isLoggedIn: false,
       }
     },
     methods: {
-
+      logout () {
+        this.isLoggedIn = false
+        this.$router.push('/login')
+      }
     },
     components: {
       
