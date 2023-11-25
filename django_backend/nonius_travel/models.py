@@ -3,7 +3,8 @@ from django.db import models
 from django.forms import SlugField
 from django_countries.fields import CountryField
 
-# Create your models here.
+
+# Clients and Reservations //////////////////////////////////////////////// 
 
 class Clients(models.Model):
     client_document = models.ManyToManyField('Document', related_name='clients', blank=True)
@@ -107,6 +108,9 @@ class Card(models.Model):
 
     def __str__(self):
         return self.slug or ''
+
+
+# USERS //////////////////////////////////////////////////////////////////
 
 
 

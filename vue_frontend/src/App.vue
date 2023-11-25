@@ -52,6 +52,12 @@
         variant="text"
         text="login">
       </v-btn>
+
+      <v-btn
+        to="/signup"
+        variant="text"
+        text="signup">
+      </v-btn>
     
     </v-toolbar>
   

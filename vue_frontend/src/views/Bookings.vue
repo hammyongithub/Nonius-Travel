@@ -25,9 +25,12 @@
           <v-text-field v-model="boardType" label="Board Type" outlined dense></v-text-field>
         </v-col>
       </v-row>
-      <v-btn @click="searchHotels" color="primary" dark>Search Hotels</v-btn>
-      <v-btn @click="searchOffers" color="primary" dark>Search Offers</v-btn>
-      <v-btn @click="print" color="primary" dark>prints</v-btn>
+      <v-btn
+        @click="searchHotelsAndOffers"
+        :disabled="!location"
+        color="primary"
+        dark
+      >Search Hotels and Offers</v-btn>
     </v-container>
     <v-container>
       <v-row>
@@ -74,49 +77,64 @@ export default {
   },
 
   methods: {
-    searchHotels() {
+    async searchHotelsAndOffers() {
+      if (this.location) {
+        await this.searchHotels();
+        this.searchOffers();
+      }
+    },
+    async searchHotels() {
       const locationCode = this.location.substring(0, 3);
-      axios
-        .get('http://127.0.0.1:8000/api/v1/hotelsearch/', {
-          params: {
-            location: locationCode,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.data);
-          this.hotels = response.data.data;
-          console.log(this.hotels);
-          for (let i = 0; i < 50; i++) {
-            this.hotelIds.push(response.data.data[i].hotelId);
-          }
-          console.log(this.hotelIds);
-        })
-        .catch((error) => {
-          console.error('Error fetching hotel data:', error);
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/v1/hotelsearch/', {
+          params: { location: locationCode },
         });
+        this.hotels = response.data.data;
+        this.hotelIds = this.hotels.map(hotel => hotel.hotelId);
+      } catch (error) {
+        console.error('Error fetching hotel data:', error);
+      }
     },
     searchOffers() {
-    const hotelIdsString = JSON.stringify(this.hotelIds);
-    axios
-        .get('http://127.0.0.1:8000/api/v1/offersearch/', {
-            params: {
-                hotelIds: hotelIdsString,
-                adults: this.adults,
-                checkInDate: this.checkInDate,
-                checkOutDate: this.checkOutDate,
-                roomQuantity: this.roomQuantity,
-                priceRange: this.priceMin.toString() + '-' + this.priceMax.toString(),
-                currency: this.currency,
-                boardType: this.boardType,
-            },
-        })
-        .then((response) => {  
+      const params = {};
+      // Add each parameter only if it is not empty
+      if (this.hotelIds.length > 0) {
+        params.hotelIds = JSON.stringify(this.hotelIds);
+      }
+      if (this.adults) {
+        params.adults = this.adults;
+      }
+      if (this.checkInDate) {
+        params.checkInDate = this.checkInDate;
+      }
+      if (this.checkOutDate) {
+        params.checkOutDate = this.checkOutDate;
+      }
+      if (this.roomQuantity) {
+        params.roomQuantity = this.roomQuantity;
+      }
+      if (this.priceMin) {
+        params.priceMin = this.priceMin;
+      }
+      if (this.priceMax) {
+        params.priceMax = this.priceMax;
+      }
+      if (this.currency) {
+        params.currency = this.currency;
+      }
+      if (this.boardType) {
+        params.boardType = this.boardType;
+      }
+
+      // Make the request with only the non-empty parameters
+      axios
+        .get('http://127.0.0.1:8000/api/v1/offersearch/', { params })
+        .then((response) => {
           this.hotelOffers = response.data.data;
           console.log(this.hotelOffers);
-
         })
         .catch((error) => {
-            console.error('Error fetching hotel offers:', error);
+          console.error('Error fetching hotel offers:', error);
         });
     },
     filterSearch(item, queryText, itemText) {
@@ -125,9 +143,6 @@ export default {
 
       return text.indexOf(searchText) > -1;
     },
-    print() {
-      console.log(this.location)
-    }
   }
 }
 </script>

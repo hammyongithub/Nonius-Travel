@@ -15,6 +15,10 @@ class LatestClientsList(APIView):
         clients = Clients.objects.all().order_by('-created_at')[:10]
         serializer = ClientsSerializer(clients, many=True)
         return Response(serializer.data)
+    
+
+# AMADEUS /////////////////////////////////////////////////////////////////////
+
 
 def hotel_search(request):
     location = request.GET.get('location')
@@ -44,3 +48,7 @@ def offer_search(request):
     except Exception as e:
         logger.error(f"Error in offer_searcg: {e}", exc_info=True)
         return JsonResponse({'error': 'Internal server error'}, status=500)
+    
+    
+# USERS ///////////////////////////////////////////////////////////////////
+
