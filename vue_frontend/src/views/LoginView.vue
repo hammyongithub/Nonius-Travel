@@ -61,7 +61,7 @@
   
 <script>
 import { ref } from 'vue';
-import { useStore } from '../store'; // Adjust the path to your store file
+import { useStore } from '../store.js'; // Adjust the path to your store file
 import axios from 'axios';
 import router from '../router';
 
@@ -81,7 +81,7 @@ export default {
         const token = response.data.auth_token;
         console.log(token);
         localStorage.setItem('authToken', token);
-        authStore.login(); // Call the store method to set the user as logged in
+        authStore.login(); // Call the store action to set the user as logged in
         axios.defaults.headers.common['Authorization'] = `Token ${token}`;
         // Redirect to the home page
         router.push({ name: 'home' }); // Replace 'HomePage' with the name of the route you want to redirect to
