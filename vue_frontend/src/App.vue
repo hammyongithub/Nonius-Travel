@@ -87,6 +87,8 @@ export default {
       router.push({ name: 'login' });
     };
 
+    console.log(authStore.isLoggedIn);
+
     return {
       isLoggedIn: computed(() => authStore.isLoggedIn), // Use computed to ensure reactivity
       logout,
