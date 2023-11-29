@@ -15,7 +15,7 @@
         nav 
       >
         <template v-slot:append>
-         <v-btn
+        <v-btn
             variant="text"
             icon="mdi-chevron-left"
             @click.stop.prevent="rail = !rail"
@@ -47,18 +47,14 @@
         <v-icon>mdi-theme-light-dark</v-icon>
       </v-btn>
 
-      <template v-if="!isLoggedIn">
-        <v-btn color="primary" variant="text" to="/login">
-          Login
-        </v-btn>
-        <v-btn color="primary" variant="text" to="/register">
-          Register
-        </v-btn>
-      </template>
+      <v-btn v-if="!isLoggedIn" color="primary" variant="text" to="/login">
+        Login
+      </v-btn>
 
       <v-btn v-else color="primary" variant="text" @click="logout">
         Logout
       </v-btn>
+
     </v-toolbar>
   
     <v-main>
@@ -68,12 +64,24 @@
 </template>
 
 <script>
+  import { computed } from 'vue';
+  import { useStore } from './store';
+
   export default {
+    setup() {
+      const store = useStore()
+
+      const isLoggedIn = computed(() => { store.state.isLoggedIn})
+
+      return {
+        isLoggedIn
+      }
+    },
     data () {
       return {
         drawer: true,
         rail: true,
-        isLoggedIn: false,
+        isLoggedIn: null
       }
     },
     methods: {

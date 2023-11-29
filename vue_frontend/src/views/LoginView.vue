@@ -15,78 +15,88 @@
     <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
     <v-text-field
-      v-model="username"
+      v-model="email"
       density="compact"
-      placeholder="Username"
+      placeholder="Email"
       prepend-inner-icon="mdi-email-outline"
       variant="outlined"
-      ></v-text-field>
+    ></v-text-field>
 
-      <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
-        Password
-      </div>
+    <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+      Password
+    </div>
 
-      <v-text-field
-        v-model="password"
-        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-        :type="visible ? 'text' : 'password'"
-        density="compact"
-        placeholder="Enter your password"
-        prepend-inner-icon="mdi-lock-outline"
-        variant="outlined"
-        @click:append-inner="visible = !visible"
-      ></v-text-field>
+    <v-text-field
+      v-model="password"
+      :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+      :type="visible ? 'text' : 'password'"
+      density="compact"
+      placeholder="Enter your password"
+      prepend-inner-icon="mdi-lock-outline"
+      variant="outlined"
+      @click:append-inner="visible = !visible"
+    ></v-text-field>
 
-      <v-card
-        class="mb-12"
-        color="surface-variant"
-        variant="tonal"
-      >
-        <v-card-text class="text-medium-emphasis text-caption">
-          Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours.
-        </v-card-text>
-      </v-card>
-
-      <v-btn
-        block
-        class="mb-8"
-        color="blue"
-        size="large"
-        variant="tonal"
-        @click="login"
-      >Log In</v-btn>
+    <v-card
+      class="mb-12"
+      color="surface-variant"
+      variant="tonal"
+    >
+      <v-card-text class="text-medium-emphasis text-caption">
+        Warning: After 3 consecutive failed login attempts, your account will be temporarily locked for three hours.
+      </v-card-text>
     </v-card>
-  </div>
+
+    <v-btn
+      block
+      class="mb-8"
+      color="blue"
+      size="large"
+      variant="tonal"
+      @click="login"
+    >Log In</v-btn>
+  </v-card>
+</div>
 </template>
   
 <script>
+import { ref } from 'vue';
+import { useStore } from '../store'; // Adjust the path to your store file
 import axios from 'axios';
+import router from '../router';
+
 export default {
-  data() {
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const visible = ref(false);
+    const authStore = useStore(); // Use the store
+
+    const login = async () => {
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/v1/auth/token/login', {
+          email: email.value,
+          password: password.value,
+        });
+        const token = response.data.auth_token;
+        console.log(token);
+        localStorage.setItem('authToken', token);
+        authStore.login(); // Call the store method to set the user as logged in
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`;
+        // Redirect to the home page
+        router.push({ name: 'home' }); // Replace 'HomePage' with the name of the route you want to redirect to
+      } catch (error) {
+        console.error(error);
+        alert('Login failed. Please check your username and password.');
+      }
+    };
+
     return {
-      visible: false,
-      username: '',
-      password: '',
+      email,
+      password,
+      visible,
+      login,
     };
   },
-  methods: {
-    login() {
-      const userData = {
-        username: this.username,
-        password: this.password,
-      };
-      axios
-        .post('http://127.0.0.1:8000/api/v1/auth/users/', userData)
-        .then(response => {
-          console.log(response.data);
-          // Here you might want to store the token in local storage or state management
-          // Redirect to a different page or update the UI
-        })
-        .catch(error => {
-          console.error(error);
-          // Handle error (e.g., show error message)
-        });
-    }
-  }
 };
 </script>

@@ -67,36 +67,35 @@
 </template>
   
 <script>
-  import axios from 'axios';
-  
-  export default {
-    data: () => ({
-      visible: false,
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    }),
-    methods: {
-      register() {
-        const userData = {
+import axios from 'axios';
+
+export default {
+  data: () => ({
+    visible: false,
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+  }),
+  methods: {
+    async register() {
+      try {
+        // Replace '/auth/users/' with your Django backend registration URL
+        await axios.post('http://127.0.0.1:8000/api/v1/auth/users/', {
           username: this.firstName + '_' + this.lastName,
           email: this.email,
           password: this.password,
-          // Include other fields as per your User model
-        };
-        axios
-          .post('http://127.0.0.1:8000/api/v1/auth/users/', userData)
-          .then(response => {
-            console.log(response.data);
-            // Handle success (e.g., show success message, redirect)
-          })
-          .catch(error => {
-            console.error(error);
-            // Handle error (e.g., show error message)
-          });
+        });
+        alert('Registration successful! Please login.');
+        this.$router.push({ name: 'login' }); 
+
+      } catch (error) {
+        console.error(error);
+        alert('Registration failed. Please check your details and try again.');
       }
     }
-  };
+  }
+};
 </script>
   

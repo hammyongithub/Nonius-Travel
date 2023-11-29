@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from datetime import timedelta
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'rest_framework',
-    'rest_framework.authtoken',
     'djoser',
     'django_countries',
     'corsheaders',
+    'rest_framework.authtoken',
 
     'nonius_travel',
 ]
@@ -134,6 +136,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
+    "https://nonius-travel-deploys.vercel.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# settings.py
+DJOSER = {
+    'LOGIN_FIELD': 'email',  # or 'username', depending on your user model
+    'USER_CREATE_PASSWORD_RETYPE': False,
+    'SERIALIZERS': {
+        'user_create': 'nonius_travel.serializers.UserCreateSerializer',
+        'user': 'nonius_travel.serializers.UserSerializer',
+    },
+    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_CONFIRMATION_EMAIL': False,
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    # JWT settings
+    'TOKEN_MODEL': 'rest_framework.authtoken.models.Token'
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+
+
