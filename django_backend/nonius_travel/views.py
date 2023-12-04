@@ -3,16 +3,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Clients
-from .serializers import ClientsSerializer, UserSerializer
+from .serializers import ClientsSerializer, InfoUserSerializer
 from django.http import JsonResponse
 from .search import search_hotels, search_offers
 import logging
-from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny
 from rest_framework import status
-from django.contrib.auth import authenticate, login
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+from rest_framework import permissions
 
 logger = logging.getLogger(__name__)
 
@@ -58,3 +54,16 @@ def offer_search(request):
     
 # USERS ///////////////////////////////////////////////////////////////////
 
+class UserSettingsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = InfoUserSerializer(user, data=request.data, partial=True)  # partial=True allows partial update
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

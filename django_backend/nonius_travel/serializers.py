@@ -1,7 +1,9 @@
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
-from django.contrib.auth.models import User
+from .models import CustomUser
+
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth import get_user_model
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,10 +57,16 @@ class ClientsSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(BaseUserCreateSerializer):
     class Meta(BaseUserCreateSerializer.Meta):
-        model = User
+        model = CustomUser
         fields = ('id', 'username', 'password', 'email')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('email', 'password')
+
+class InfoUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'user_language', 'user_currency', 'user_timezone')
+        read_only_fields = ('id',)
