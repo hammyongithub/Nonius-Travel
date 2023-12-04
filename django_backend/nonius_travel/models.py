@@ -2,6 +2,7 @@ from operator import truediv
 from django.db import models
 from django.forms import SlugField
 from django_countries.fields import CountryField
+from django.contrib.auth.models import AbstractUser
 
 
 # Clients and Reservations //////////////////////////////////////////////// 
@@ -112,5 +113,10 @@ class Card(models.Model):
 
 # USERS //////////////////////////////////////////////////////////////////
 
-
-
+class CustomUser(AbstractUser):
+    email = models.EmailField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    user_currency = models.CharField(default='EUR', max_length=255)
+    user_language = models.CharField(default='en', max_length=255)
+    user_timezone = models.CharField(default='UTC', max_length=255)
