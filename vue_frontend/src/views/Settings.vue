@@ -51,28 +51,6 @@ export default {
       timezones: ['UTC', 'UTC+1', 'UTC+2', 'UTC+3', 'UTC+4', 'UTC+5', 'UTC+6', 'UTC+7', 'UTC+8', 'UTC+9', 'UTC+10', 'UTC+11', 'UTC+12'],
     };
   },
-  methods: {
-    async updateSettings() {
-      try {
-        // You need to replace 'userId' with the actual id of the logged-in user
-        const userId = this.$store.state.userId || 'the-user-id'; 
-        const token = localStorage.getItem('authToken');
-        await axios.patch(`http://127.0.0.1:8000/api/v1/users/${userId}/`, {
-          user_language: this.selectedLanguage,
-          user_currency: this.selectedCurrency,
-          user_timezone: this.selectedTimeZone
-        }, {
-          headers: {
-            Authorization: `Token ${token}`
-          }
-        });
-        alert('Settings updated successfully!');
-      } catch (error) {
-        console.error(error);
-        alert('Failed to update settings. Please try again.');
-      }
-    }
-  },
   mounted() {
     this.loadUserSettings();
   },
@@ -81,7 +59,7 @@ export default {
       // Load the current user settings when the component is mounted
       const token = localStorage.getItem('authToken');
       if (token) {
-        axios.get('http://127.0.0.1:8000/api/v1/users/me/', {
+        axios.get('http://127.0.0.1:8000/api/v1/auth/settings/', {
           headers: {
             Authorization: `Token ${token}`
           }
