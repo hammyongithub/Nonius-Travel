@@ -1,47 +1,79 @@
 <template>
   <div>
-  <v-form>
-    <v-container>
-      <v-row>
-        <v-col cols="12" sm="6" md="4">
-          <v-combobox
-            v-model="location"
-            :items="iataCodes"
-            :filter="filterSearch"
-            label="Location"
-            item-text="label"
-            item-value="value"
-            clearable
-            outlined
-            dense
-          ></v-combobox>
-          <v-text-field type="date" v-model="checkInDate" label="Check-in Date" outlined dense></v-text-field>
-          <v-text-field type="date" v-model="checkOutDate" label="Check-out Date" outlined dense></v-text-field>
-          <v-text-field type="number" v-model="adults" label="Guests" outlined dense></v-text-field>
-          <v-text-field type="number" v-model="roomQuantity" label="Rooms" outlined dense></v-text-field>
-          <v-text-field type="number" v-model="priceMin" label="Minimum Price" outlined dense></v-text-field>
-          <v-text-field type="number" v-model="priceMax" label="Maximum Price" outlined dense></v-text-field>
-          <v-text-field v-model="currency" label="Currency" outlined dense></v-text-field>
-          <v-text-field v-model="boardType" label="Board Type" outlined dense></v-text-field>
-        </v-col>
-      </v-row>
-      <v-btn
-        @click="searchHotelsAndOffers"
-        :disabled="!location"
-        color="primary"
-        dark
-      >Search Hotels and Offers</v-btn>
-    </v-container>
-    <v-container>
-      <v-row>
-        <v-col cols="12" v-for="(offer, index) in hotelOffers.slice(0, 9)" :key="index">
-          <hotel-card :offer="offer"></hotel-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+    <v-form>
+      <v-container>
+        <!-- Inputs for hotel search -->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-combobox
+              v-model="location"
+              :items="iataCodes"
+              :filter="filterSearch"
+              label="Location"
+              item-text="label"
+              item-value="value"
+              clearable
+              outlined
+              dense
+            ></v-combobox>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-text-field type="date" v-model="checkInDate" label="Check-in Date" outlined dense></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-text-field type="date" v-model="checkOutDate" label="Check-out Date" outlined dense></v-text-field>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field type="number" v-model="adults" label="Guests" outlined dense></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field type="number" v-model="roomQuantity" label="Rooms" outlined dense></v-text-field>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field type="number" v-model="priceMin" label="Minimum Price" outlined dense></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field type="number" v-model="priceMax" label="Maximum Price" outlined dense></v-text-field>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field v-model="currency" label="Currency" outlined dense></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field v-model="boardType" label="Board Type" outlined dense></v-text-field>
+          </v-col>
+        </v-row>
+        
+        <v-row>
+          <v-col cols="12">
+            <v-btn
+              @click="searchHotelsAndOffers"
+              :disabled="!location"
+              color="primary"
+              dark
+            >Search Hotels and Offers</v-btn>
+          </v-col>
+        </v-row>
+
+        <!-- Displaying hotel offers -->
+        <v-row>
+          <v-col cols="12" v-for="(offer, index) in hotelOffers.slice(0, 9)" :key="index">
+            <hotel-card :offer="offer"></hotel-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
   </div>
 </template>
+
 
 
 <script>
@@ -89,7 +121,7 @@ export default {
         const response = await axios.get('http://127.0.0.1:8000/api/v1/hotelsearch/', {
           params: { location: locationCode },
         });
-        this.hotels = response.data.data;
+        this.hotels = response.data.data.slice(0, 19); // Dont forget to change this, limit only 20 for testing
         this.hotelIds = this.hotels.map(hotel => hotel.hotelId);
       } catch (error) {
         console.error('Error fetching hotel data:', error);
