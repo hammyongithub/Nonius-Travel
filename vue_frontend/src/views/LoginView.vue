@@ -71,10 +71,11 @@ export default {
     const password = ref('');
     const visible = ref(false);
     const authStore = useStore(); // Use the store
+    const baseUrl = process.env.VUE_APP_API_BASE_URL;
 
     const login = async () => {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/v1/auth/token/login', {
+        const response = await axios.post(`${baseUrl}api/v1/auth/token/login`, {
           email: email.value,
           password: password.value,
         });

@@ -117,8 +117,9 @@ export default {
     },
     async searchHotels() {
       const locationCode = this.location.substring(0, 3);
+      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/v1/hotelsearch/', {
+        const response = await axios.get(`${baseUrl}api/v1/hotelsearch/`, {
           params: { location: locationCode },
         });
         this.hotels = response.data.data.slice(0, 19); // Dont forget to change this, limit only 20 for testing
@@ -129,6 +130,7 @@ export default {
     },
     searchOffers() {
       const params = {};
+      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       // Add each parameter only if it is not empty
       if (this.hotelIds.length > 0) {
         params.hotelIds = JSON.stringify(this.hotelIds);
@@ -160,7 +162,7 @@ export default {
 
       // Make the request with only the non-empty parameters
       axios
-        .get('http://127.0.0.1:8000/api/v1/offersearch/', { params })
+        .get(`${baseUrl}api/v1/offersearch/`, { params })
         .then((response) => {
           this.hotelOffers = response.data.data;
           console.log(this.hotelOffers);

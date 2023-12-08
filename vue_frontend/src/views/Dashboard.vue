@@ -41,6 +41,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios'
 
@@ -51,10 +52,12 @@ export default {
     }
   },
   async mounted() {
+    const baseUrl = process.env.VUE_APP_API_BASE_URL; // Access the environment variable
+
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/v1/latestclients/')
+      const response = await axios.get(`${baseUrl}api/v1/latestclients/`) // Use template literals to insert the variable
       this.latestclients = response.data
-      console.log(this.latestclients); // Add this line to check the data
+      console.log(this.latestclients); // This will help you to see the fetched data in the console
     } catch (error) {
       console.error('Error fetching latest clients:', error)
     }

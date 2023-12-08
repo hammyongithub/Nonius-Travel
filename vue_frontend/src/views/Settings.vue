@@ -58,8 +58,9 @@ export default {
     loadUserSettings() {
       // Load the current user settings when the component is mounted
       const token = localStorage.getItem('authToken');
+      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       if (token) {
-        axios.get('http://127.0.0.1:8000/api/v1/auth/settings/', {
+        axios.get(`${baseUrl}api/v1/auth/settings/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -76,7 +77,7 @@ export default {
       // Update the user settings
       const token = localStorage.getItem('authToken');
       if (token && this.selectedLanguage && this.selectedCurrency && this.selectedTimeZone) {
-        axios.patch('http://127.0.0.1:8000/api/v1/auth/settings/', {
+        axios.patch(`${baseUrl}/api/v1/auth/settings/`, {
           user_language: this.selectedLanguage,
           user_currency: this.selectedCurrency,
           user_timezone: this.selectedTimeZone
