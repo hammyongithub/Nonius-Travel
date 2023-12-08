@@ -119,7 +119,7 @@ export default {
       const locationCode = this.location.substring(0, 3);
       const baseUrl = process.env.VUE_APP_API_BASE_URL;
       try {
-        const response = await axios.get(`${baseUrl}api/v1/hotelsearch/`, {
+        const response = await axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/hotelsearch/', {
           params: { location: locationCode },
         });
         this.hotels = response.data.data.slice(0, 19); // Dont forget to change this, limit only 20 for testing
@@ -162,7 +162,7 @@ export default {
 
       // Make the request with only the non-empty parameters
       axios
-        .get(`${baseUrl}api/v1/offersearch/`, { params })
+        .get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/offersearch/', { params })
         .then((response) => {
           this.hotelOffers = response.data.data;
           console.log(this.hotelOffers);

@@ -75,7 +75,7 @@ export default {
 
     const login = async () => {
       try {
-        const response = await axios.post(`${baseUrl}api/v1/auth/token/login`, {
+        const response = await axios.post('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/token/login', {
           email: email.value,
           password: password.value,
         });
