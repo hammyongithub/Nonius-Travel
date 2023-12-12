@@ -63,12 +63,13 @@
           </v-col>
         </v-row>
 
-        <v-overlay :value="loading">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        </v-overlay>
-
+        <v-row v-if="loading">
+          <v-col class="text-center">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+          </v-col>
+        </v-row>
         <!-- Displaying hotel offers -->
-        <v-row>
+        <v-row v-else>
           <v-col cols="12" v-for="(offer, index) in hotelOffers.slice(0, 9)" :key="index">
             <hotel-card :offer="offer"></hotel-card>
           </v-col>
@@ -116,13 +117,14 @@ export default {
   methods: {
     async searchHotelsAndOffers() {
       if (this.location) {
-        this.loading = true;
+        this.loading = true; // Start loading
         try {
-          await Promise.all([this.searchHotels(), this.searchOffers()]);
+          await this.searchHotels(); // Wait for searchHotels to complete
+          await this.searchOffers(); // Then execute searchOffers
         } catch (error) {
-          console.error('Error in fetching data:', error);
+          console.error('Error in hotel and offer search:', error);
         } finally {
-          this.loading = false;
+          this.loading = false; // Stop loading
         }
       }
     },
@@ -172,7 +174,7 @@ export default {
       }
 
       // Make the request with only the non-empty parameters
-      return axios
+      axios
         .get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/offersearch/', { params })
         .then((response) => {
           this.hotelOffers = response.data.data;
