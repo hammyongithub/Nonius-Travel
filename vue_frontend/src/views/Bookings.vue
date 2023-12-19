@@ -45,10 +45,10 @@
         
         <v-row>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="currency" label="Currency" outlined dense></v-text-field>
+            <v-select v-model="currency" label="Currency"  :items="currencyList" outlined dense></v-select>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="boardType" label="Board Type" outlined dense></v-text-field>
+            <v-select v-model="boardType" label="Board Type"  :items="boardTypeList" outlined dense></v-select>
           </v-col>
         </v-row>
         
@@ -106,6 +106,8 @@ export default {
       boardType: '',
       hotelOffers: [],
       loading: false,
+      boardTypeList: ["ROOM_ONLY", "BREAKFAST"],
+      currencyList: ["EUR", "USD", "GBP", "JPY", "CNY"],
     }
   },
   computed: {
