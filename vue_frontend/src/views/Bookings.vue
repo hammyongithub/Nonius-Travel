@@ -110,6 +110,9 @@ export default {
       currencyList: ["EUR", "USD", "GBP", "JPY", "CNY"],
     }
   },
+  mounted() {
+    this.userCurrencyLoader();
+  },
   computed: {
     iataCodes() {
       return this.iataJSON.map((airport) => `${airport.iata} - ${airport.country} - ${airport.city}`);
@@ -191,6 +194,21 @@ export default {
 
       return text.indexOf(searchText) > -1;
     },
+    userCurrencyLoader() {
+      const token = localStorage.getItem('authToken');
+      const baseUrl = process.env.VUE_APP_API_BASE_URL;
+      if (token) {
+        axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/settings/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }).then(response => {
+          this.currency = response.data.user_currency;
+        }).catch(error => {
+          console.error(error);
+        });
+      }
+    }
   }
 }
 </script>
