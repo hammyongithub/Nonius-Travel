@@ -125,8 +125,6 @@ export default {
           await this.searchOffers(); // Then execute searchOffers
         } catch (error) {
           console.error('Error in hotel and offer search:', error);
-        } finally {
-          this.loading = false; // Stop loading
         }
       }
     },
@@ -181,6 +179,7 @@ export default {
         .then((response) => {
           this.hotelOffers = response.data.data;
           console.log(this.hotelOffers);
+          this.loading = false;
         })
         .catch((error) => {
           console.error('Error fetching hotel offers:', error);
