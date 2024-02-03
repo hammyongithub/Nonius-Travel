@@ -19,16 +19,12 @@
           @change="updateSettings"
         ></v-select>
 
-        <!-- Time Zone Selector -->
-        <!-- Time Zone Selector with Search Capability -->
-        <v-select
+        <v-combobox
           v-model="selectedTimeZone"
           :items="timezones"
           label="Select Time Zone"
           @change="updateSettings"
-          :search-input.sync="search"
-          autocomplete
-        ></v-select>
+        ></v-combobox>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" @click="updateSettings">Update Settings</v-btn>
