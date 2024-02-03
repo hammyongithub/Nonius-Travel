@@ -20,11 +20,14 @@
         ></v-select>
 
         <!-- Time Zone Selector -->
+        <!-- Time Zone Selector with Search Capability -->
         <v-select
           v-model="selectedTimeZone"
           :items="timezones"
           label="Select Time Zone"
           @change="updateSettings"
+          :search-input.sync="search"
+          autocomplete
         ></v-select>
       </v-card-text>
       <v-card-actions>
