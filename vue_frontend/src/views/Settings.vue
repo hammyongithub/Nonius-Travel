@@ -22,10 +22,13 @@
         <!-- Time Zone Selector -->
         <v-select
           v-model="selectedTimeZone"
-          :items="timezones"
           label="Select Time Zone"
           @change="updateSettings"
-        ></v-select>
+        >
+        <option v-for="timezone in timezones" :key="timezone.value" :value="timezone.value">
+          {{ timezone.label }}
+        </option>
+        </v-select>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" @click="updateSettings">Update Settings</v-btn>
