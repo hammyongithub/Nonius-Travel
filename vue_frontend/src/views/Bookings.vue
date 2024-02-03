@@ -56,7 +56,7 @@
           <v-col cols="12">
             <v-btn
               @click="searchHotelsAndOffers"
-              :disabled="!location"
+              :disabled="!canSearch"
               color="primary"
               dark
             >Search Hotels and Offers</v-btn>
@@ -116,6 +116,9 @@ export default {
   computed: {
     iataCodes() {
       return this.iataJSON.map((airport) => `${airport.iata} - ${airport.country} - ${airport.city}`);
+    },
+    canSearch() {
+      return this.location && this.checkInDate && this.checkOutDate && this.adults && this.roomQuantity;
     },
   },
 
