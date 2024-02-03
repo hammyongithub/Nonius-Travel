@@ -1,1 +1,2 @@
-web: gunicorn django_backend.wsgi
+web: cd django_backend && gunicorn django_backend.wsgi
+
