@@ -22,13 +22,10 @@
         <!-- Time Zone Selector -->
         <v-select
           v-model="selectedTimeZone"
+          :items="timezones"
           label="Select Time Zone"
           @change="updateSettings"
-        >
-        <option v-for="timezone in timezones" :key="timezone.value" :value="timezone.value">
-          {{ timezone.label }}
-        </option>
-        </v-select>
+        ></v-select>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" @click="updateSettings">Update Settings</v-btn>
@@ -55,11 +52,9 @@ export default {
       timezones: [],
     };
   },
-  created() {
-    this.populateTimeZones();
-  },
   mounted() {
     this.loadUserSettings();
+    this.populateTimeZones();
   },
   methods: {
     loadUserSettings() {
