@@ -54,7 +54,7 @@ export default {
   },
   mounted() {
     this.loadUserSettings();
-    this.populateTimeZones();
+    this.loadTimeZones();
   },
   methods: {
     loadUserSettings() {
@@ -74,6 +74,10 @@ export default {
           console.error(error);
         });
       }
+    },
+    loadTimeZones() {
+    // Load timezone options from moment-timezone
+    this.timezones = moment.tz.names();
     },
     updateSettings() {
       // Update the user settings
@@ -95,11 +99,6 @@ export default {
         });
       }
     },
-    populateTimeZones(){
-      this.timzeons = moment.tz.names().map(tz =>{
-        return { value: tz, label: tz.replace(/_/g, ' ').replace(/\//g, ', ') };
-      });
-    }
   }
 };
 </script>
