@@ -36,6 +36,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 export default {
   data() {
@@ -48,8 +49,11 @@ export default {
         'Spanish',
       ],
       currencies: ['USD', 'EUR', 'GBP', 'JPY', 'CNY'],
-      timezones: ['UTC', 'UTC+1', 'UTC+2', 'UTC+3', 'UTC+4', 'UTC+5', 'UTC+6', 'UTC+7', 'UTC+8', 'UTC+9', 'UTC+10', 'UTC+11', 'UTC+12'],
+      timezones: [],
     };
+  },
+  created() {
+    this.populateTimeZones();
   },
   mounted() {
     this.loadUserSettings();
@@ -92,6 +96,11 @@ export default {
           alert('Failed to update settings. Please try again.');
         });
       }
+    },
+    populateTimeZones(){
+      this.timzeons = moment.tz.names().map(tz =>{
+        return { value: tz, label: tz.replace(/_/g, ' ').replace(/\//g, ', ') };
+      });
     }
   }
 };
