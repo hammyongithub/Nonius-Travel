@@ -33,7 +33,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment-timezone';
-import apiUrl from './apiconfig.js'
+import apiUrl from 'vue_frontend/src/apiconfig.js'
 
 export default {
   data() {
