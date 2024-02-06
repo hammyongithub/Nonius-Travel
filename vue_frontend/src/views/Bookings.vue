@@ -28,7 +28,7 @@
         <v-row>
           <v-col cols="12" sm="6">
             <v-text-field type="number" v-model="adults" label="Guests" outlined dense></v-text-field>
-          </v-col>
+          </v-col>  
           <v-col cols="12" sm="6">
             <v-text-field type="number" v-model="roomQuantity" label="Rooms" outlined dense></v-text-field>
           </v-col>
@@ -56,7 +56,7 @@
           <v-col cols="12">
             <v-btn
               @click="searchHotelsAndOffers"
-              :disabled="!location"
+              :disabled="!canSearch"
               color="primary"
               dark
             >Search Hotels and Offers</v-btn>
@@ -112,10 +112,14 @@ export default {
   },
   mounted() {
     this.userCurrencyLoader();
+    this.setDefaultDates();
   },
   computed: {
     iataCodes() {
       return this.iataJSON.map((airport) => `${airport.iata} - ${airport.country} - ${airport.city}`);
+    },
+    canSearch() {
+      return this.location && this.checkInDate && this.checkOutDate && this.adults && this.roomQuantity;
     },
   },
 
@@ -208,6 +212,30 @@ export default {
           console.error(error);
         });
       }
+    },
+    setDefaultDates() {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const weekAfterTomorrow = new Date(tomorrow);
+      weekAfterTomorrow.setDate(weekAfterTomorrow.getDate() + 6);
+
+      // Format the dates to YYYY-MM-DD for the date input fields
+      this.checkInDate = this.formatDate(tomorrow);
+      this.checkOutDate = this.formatDate(weekAfterTomorrow);
+    },
+    formatDate(date) {
+      let month = '' + (date.getMonth() + 1),
+          day = '' + date.getDate(),
+          year = date.getFullYear();
+
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+
+      return [year, month, day].join('-');
     }
   }
 }

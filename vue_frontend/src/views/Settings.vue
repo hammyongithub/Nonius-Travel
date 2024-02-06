@@ -19,13 +19,12 @@
           @change="updateSettings"
         ></v-select>
 
-        <!-- Time Zone Selector -->
-        <v-select
+        <v-combobox
           v-model="selectedTimeZone"
           :items="timezones"
           label="Select Time Zone"
           @change="updateSettings"
-        ></v-select>
+        ></v-combobox>
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" @click="updateSettings">Update Settings</v-btn>
@@ -36,6 +35,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 export default {
   data() {
@@ -48,11 +48,12 @@ export default {
         'Spanish',
       ],
       currencies: ['USD', 'EUR', 'GBP', 'JPY', 'CNY'],
-      timezones: ['UTC', 'UTC+1', 'UTC+2', 'UTC+3', 'UTC+4', 'UTC+5', 'UTC+6', 'UTC+7', 'UTC+8', 'UTC+9', 'UTC+10', 'UTC+11', 'UTC+12'],
+      timezones: [],
     };
   },
   mounted() {
     this.loadUserSettings();
+    this.loadTimeZones();
   },
   methods: {
     loadUserSettings() {
@@ -73,6 +74,10 @@ export default {
         });
       }
     },
+    loadTimeZones() {
+    // Load timezone options from moment-timezone
+    this.timezones = moment.tz.names();
+    },
     updateSettings() {
       // Update the user settings
       const token = localStorage.getItem('authToken');
@@ -92,7 +97,7 @@ export default {
           alert('Failed to update settings. Please try again.');
         });
       }
-    }
+    },
   }
 };
 </script>
