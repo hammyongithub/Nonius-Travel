@@ -85,6 +85,7 @@
 import axios from 'axios'
 import HotelCard from '../components/HotelCard.vue'
 import airports from '../assets/airports.json'
+import { apiUrl } from "../apiconfig.js"
 
 export default {
   components: {
@@ -137,9 +138,8 @@ export default {
     },
     async searchHotels() {
       const locationCode = this.location.substring(0, 3);
-      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       try {
-        const response = await axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/hotelsearch/', {
+        const response = await axios.get(`${apiUrl}hotelsearch/`, {
           params: { location: locationCode },
         });
         this.hotels = response.data.data.slice(0, 19); // Dont forget to change this, limit only 20 for testing
@@ -150,7 +150,6 @@ export default {
     },
     searchOffers() {
       const params = {};
-      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       // Add each parameter only if it is not empty
       if (this.hotelIds.length > 0) {
         params.hotelIds = JSON.stringify(this.hotelIds);
@@ -182,7 +181,7 @@ export default {
 
       // Make the request with only the non-empty parameters
       axios
-        .get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/offersearch/', { params })
+        .get(`${apiUrl}offersearch/`, { params })
         .then((response) => {
           this.hotelOffers = response.data.data;
           console.log(this.hotelOffers);
@@ -202,7 +201,7 @@ export default {
       const token = localStorage.getItem('authToken');
       const baseUrl = process.env.VUE_APP_API_BASE_URL;
       if (token) {
-        axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/settings/', {
+        axios.get(`${apiUrl}auth/settings/`, {
           headers: {
             Authorization: `Token ${token}`
           }

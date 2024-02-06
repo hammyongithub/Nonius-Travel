@@ -44,6 +44,7 @@
 
 <script>
 import axios from 'axios'
+import { apiUrl } from "../apiconfig.js"
 
 export default {
   data() {

@@ -64,6 +64,7 @@ import { ref } from 'vue';
 import { useStore } from '../store.js'; // Adjust the path to your store file
 import axios from 'axios';
 import router from '../router';
+import { apiUrl } from "../apiconfig.js"
 
 export default {
   setup() {
