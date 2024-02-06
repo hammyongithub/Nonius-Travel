@@ -56,7 +56,7 @@ export default {
     const baseUrl = process.env.VUE_APP_API_BASE_URL; // Access the environment variable
 
     try {
-      const response = await axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/latestclients') // Use template literals to insert the variable
+      const response = await axios.get(`${apiUrl}latestclients`) // Use template literals to insert the variable
       this.latestclients = response.data
       console.log(this.latestclients); // This will help you to see the fetched data in the console
     } catch (error) {

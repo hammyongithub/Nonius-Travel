@@ -72,11 +72,10 @@ export default {
     const password = ref('');
     const visible = ref(false);
     const authStore = useStore(); // Use the store
-    const baseUrl = process.env.VUE_APP_API_BASE_URL;
 
     const login = async () => {
       try {
-        const response = await axios.post('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/token/login', {
+        const response = await axios.post(`${apiUrl}auth/token/login`, {
           email: email.value,
           password: password.value,
         });
