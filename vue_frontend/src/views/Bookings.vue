@@ -199,7 +199,6 @@ export default {
     },
     userCurrencyLoader() {
       const token = localStorage.getItem('authToken');
-      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       if (token) {
         axios.get(`${apiUrl}auth/settings/`, {
           headers: {
