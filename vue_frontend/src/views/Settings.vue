@@ -33,6 +33,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment-timezone';
+import apiUrl from './apiconfig.js'
 
 export default {
   data() {
@@ -57,7 +58,7 @@ export default {
       // Load the current user settings when the component is mounted
       const token = localStorage.getItem('authToken');
       if (token) {
-        axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/settings/', {
+        axios.get(`${apiUrl}auth/settings/`, {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -78,7 +79,7 @@ export default {
       // Update the user settings
       const token = localStorage.getItem('authToken');
       if (token && this.selectedLanguage && this.selectedCurrency && this.selectedTimeZone) {
-        axios.patch('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/settings/', {
+        axios.patch(`${apiUrl}auth/settings/`, {
           user_language: this.selectedLanguage,
           user_currency: this.selectedCurrency,
           user_timezone: this.selectedTimeZone
