@@ -8,7 +8,6 @@
           v-model="selectedLanguage"
           :items="languages"
           label="Select Language"
-          @change="updateSettings"
         ></v-select>
 
         <!-- Currency Selector -->
@@ -16,14 +15,12 @@
           v-model="selectedCurrency"
           :items="currencies"
           label="Select Currency"
-          @change="updateSettings"
         ></v-select>
 
         <v-combobox
           v-model="selectedTimeZone"
           :items="timezones"
           label="Select Time Zone"
-          @change="updateSettings"
         ></v-combobox>
       </v-card-text>
       <v-card-actions>
@@ -59,7 +56,6 @@ export default {
     loadUserSettings() {
       // Load the current user settings when the component is mounted
       const token = localStorage.getItem('authToken');
-      const baseUrl = process.env.VUE_APP_API_BASE_URL;
       if (token) {
         axios.get('https://evening-coast-93489-45f54e292976.herokuapp.com/api/v1/auth/settings/', {
           headers: {
